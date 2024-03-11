@@ -13,8 +13,8 @@ import { Spinner } from "../components/Spinner";
 const Questions = () => {
   return (
     <div className="mt-5 w-full flex flex-col">
-      <div className="flex justify-between mt-2 mb-1">
-        <h1 className="mx-5 text-3xl text-slate-700">All questions</h1>
+      <div className="flex justify-between mt-2 mb-1 mx-5 ">
+        <h1 className="text-3xl text-slate-700">All questions</h1>
         <Link to="/questions/ask" className="button primary">
           Ask Question
         </Link>

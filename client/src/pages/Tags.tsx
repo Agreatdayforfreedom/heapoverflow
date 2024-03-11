@@ -30,6 +30,7 @@ const Tags = () => {
 
 const TagSection = () => {
   const [currentQueryParameters, setSearchParams] = useSearchParams();
+  const [limit, setLimit] = useState<number>(1);
   const [skip, setSkip] = useState<number>(0);
 
   const dispatch = useAppDispatch();
@@ -57,7 +58,7 @@ const TagSection = () => {
         ))}
       </div>
       <div className="p-4">
-        <Pagination items={total} limit={50} skip={skip} />
+        <Pagination items={total} limit={limit} skip={skip} />
       </div>
     </section>
   );

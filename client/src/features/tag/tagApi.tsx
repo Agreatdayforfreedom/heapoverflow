@@ -8,14 +8,15 @@ interface Payload {
   infoTag?: string;
   config?: Config;
   skip?: number;
+  limit?: number;
 }
 
 export const getTagsThunk = createAsyncThunk(
   "tag/getTags",
-  async ({ skip }: Payload, { rejectWithValue }) => {
+  async ({ skip, limit }: Payload, { rejectWithValue }) => {
     try {
       const { data } = await axios(
-        `${import.meta.env.VITE_BACKEND_URL}/tags?skip=${skip}`
+        `${import.meta.env.VITE_BACKEND_URL}/tags?limit=${limit}&skip=${skip}`
       );
       return data;
     } catch (error) {

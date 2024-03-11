@@ -8,39 +8,22 @@ import QuestionCard from "../components/QuestionCard";
 import { Spinner } from "../components/Spinner";
 import { getQuestionsByTagThunk } from "../features/question/questionApi";
 import { getTagThunk } from "../features/tag/tagApi";
+import { Tag } from "../interfaces/interfaces";
 
 const Tagged = () => {
-  const [currentQueryParameters, setSearchParams] = useSearchParams();
-
-  const [limit, setLimit] = useState(15);
-  const [skip, setSkip] = useState(0);
-
   const params = useParams();
 
-  const { tag, loading: loadingTag } = useAppSelector((state) => state.tag);
-  const { questions, loading, total } = useAppSelector(
-    (state) => state.question
-  );
+  const { tag, loading } = useAppSelector((state) => state.tag);
   const dispatch = useAppDispatch();
 
   useEffect(() => {
-    if (tag) dispatch(getQuestionsByTagThunk({ id: tag._id, limit, skip }));
-  }, [tag]);
-
-  useEffect(() => {
     if (params.tag) {
-      setTimeout(() => {
-        dispatch(getTagThunk({ tag: params.tag }));
-      }, 100);
+      dispatch(getTagThunk({ tag: params.tag }));
     }
-  }, [limit, skip, params.tag]);
+  }, [params.tag]);
 
-  useEffect(() => {
-    if (currentQueryParameters.get("skip")) {
-      setSkip(parseInt(currentQueryParameters.get("skip")!, 10));
-    }
-  }, [currentQueryParameters]);
-  if (!tag || loadingTag || loading) return <Spinner />;
+  // console.log(loading);
+  if (!tag || loading) return <Spinner />;
   return (
     <div>
       <div>
@@ -55,18 +38,59 @@ const Tagged = () => {
             className="text-blue-500 text-sm"
           />
         </div>
-        <p className="text-lg text-slate-600 p-4">{total} questions</p>
       </div>
-
-      <section>
-        {questions.map((question) => (
-          <QuestionCard key={nanoid()} question={question} />
-        ))}
-        <div className="p-4">
-          <Pagination items={total} limit={limit} skip={skip} />
-        </div>
-      </section>
+      <TaggedSection tag={tag} />
     </div>
+  );
+};
+
+const TaggedSection = ({ tag }: { tag: Tag }) => {
+  const [currentQueryParameters, setSearchParams] = useSearchParams();
+  const [limit, setLimit] = useState(10);
+  const [skip, setSkip] = useState(0);
+
+  const dispatch = useAppDispatch();
+
+  const { questions, loading, total } = useAppSelector(
+    (state) => state.question
+  );
+
+  useEffect(() => {
+    dispatch(
+      getQuestionsByTagThunk({
+        id: tag._id,
+        limit,
+        skip,
+      })
+    );
+  }, [skip, limit]);
+
+  useEffect(() => {
+    console.log(currentQueryParameters.get("skip"), "<<<");
+    if (currentQueryParameters.get("skip")) {
+      setSkip(parseInt(currentQueryParameters.get("skip")!, 10));
+      dispatch(
+        getQuestionsByTagThunk({
+          id: tag._id,
+          limit,
+          skip,
+        })
+      );
+    }
+  }, [currentQueryParameters]);
+
+  if (loading) return <Spinner />;
+  return (
+    <section>
+      <p className="text-lg text-slate-600 p-4">{total} questions</p>
+
+      {questions.map((question) => (
+        <QuestionCard key={nanoid()} question={question} />
+      ))}
+      <div className="p-4">
+        <Pagination items={total} limit={limit} skip={skip} />
+      </div>
+    </section>
   );
 };
 

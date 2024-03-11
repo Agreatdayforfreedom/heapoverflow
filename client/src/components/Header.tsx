@@ -22,7 +22,7 @@ const Header = () => {
   };
 
   return (
-    <header className="z-20 bg-white flex justify-between h-[50px] items-center shadow-lg fixed top-0 w-full">
+    <header className="z-20 px-3 bg-white flex justify-between h-[50px] items-center shadow-lg fixed top-0 w-full">
       <button className="relative pl-2 block sm:hidden" onClick={openMenu}>
         <GiHamburgerMenu size={20} />
       </button>
