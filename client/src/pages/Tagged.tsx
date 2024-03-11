@@ -22,7 +22,6 @@ const Tagged = () => {
     }
   }, [params.tag]);
 
-  // console.log(loading);
   if (!tag || loading) return <Spinner />;
   return (
     <div>
@@ -46,7 +45,7 @@ const Tagged = () => {
 
 const TaggedSection = ({ tag }: { tag: Tag }) => {
   const [currentQueryParameters, setSearchParams] = useSearchParams();
-  const [limit, setLimit] = useState(10);
+  const [limit, setLimit] = useState(20);
   const [skip, setSkip] = useState(0);
 
   const dispatch = useAppDispatch();
@@ -66,7 +65,6 @@ const TaggedSection = ({ tag }: { tag: Tag }) => {
   }, [skip, limit]);
 
   useEffect(() => {
-    console.log(currentQueryParameters.get("skip"), "<<<");
     if (currentQueryParameters.get("skip")) {
       setSkip(parseInt(currentQueryParameters.get("skip")!, 10));
       dispatch(

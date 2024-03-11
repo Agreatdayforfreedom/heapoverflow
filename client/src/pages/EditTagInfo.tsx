@@ -1,4 +1,4 @@
-import React, { FormEvent, useEffect, useState } from "react";
+import { FormEvent, useEffect, useState, useTransition } from "react";
 import { Navigate, useNavigate, useParams } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../app/hooks";
 import Button from "../components/Button";
@@ -17,6 +17,8 @@ const EditTagInfo = () => {
   const navigate = useNavigate();
   const { tagName } = useParams();
   const { form, handleChange, setForm } = useForm<{ infoTag: string }>();
+
+  const [isPending, startTransition] = useTransition();
 
   const config = configAxios(token);
 
@@ -47,8 +49,11 @@ const EditTagInfo = () => {
     e.preventDefault();
     if (tag) {
       dispatch(editTagThunk({ id: tag._id, infoTag: form.infoTag, config }));
-      navigate(`/questions/tagged/${tagName}`);
     }
+
+    startTransition(() => {
+      navigate(`/questions/tagged/${tagName}`);
+    });
   };
 
   if (!user) return <Navigate to="/" />;
@@ -68,7 +73,7 @@ const EditTagInfo = () => {
           autoFocus
         ></textarea>
       </div>
-      <Button name={"Save edits"} disabled={fill} />
+      <Button name={"Save edits"} disabled={fill || isPending} />
     </form>
   );
 };

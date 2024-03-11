@@ -15,7 +15,6 @@ export const getTagsThunk = createAsyncThunk(
   "tag/getTags",
   async ({ skip, limit }: Payload, { rejectWithValue }) => {
     try {
-      console.log(limit);
       const { data } = await axios(
         `${import.meta.env.VITE_BACKEND_URL}/tags?limit=${limit}&skip=${skip}`
       );

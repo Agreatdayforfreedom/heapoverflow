@@ -54,7 +54,8 @@ const tagSlice = createSlice({
         state.loading = true;
       })
       .addCase(editTagThunk.fulfilled, (state, action) => {
-        state.tag = action.payload;
+        state.tag = undefined;
+
         state.loading = false;
       });
   },
