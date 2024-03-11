@@ -13,6 +13,22 @@ interface Props {
   tag: ITag;
 }
 const Tags = () => {
+  return (
+    <>
+      <div className="p-5 ">
+        <h1 className="text-2xl font-semibold mb-2 text-slate-700">Tags</h1>
+        <p className="max-w-xl text-slate-700">
+          A tag is a keyword or label that categorizes your question with other,
+          similar questions. Using the right tags makes it easier for others to
+          find and answer your question.
+        </p>
+        <TagSection />
+      </div>
+    </>
+  );
+};
+
+const TagSection = () => {
   const [currentQueryParameters, setSearchParams] = useSearchParams();
   const [skip, setSkip] = useState<number>(0);
 
@@ -32,28 +48,18 @@ const Tags = () => {
     }
   }, [currentQueryParameters]);
 
-  if (loading) return <Spinner />;
+  if (loading) return <Spinner size="4em" />;
   return (
-    <>
-      <div className="p-5 ">
-        <h1 className="text-2xl font-semibold mb-2 text-slate-700">Tags</h1>
-        <p className="max-w-xl text-slate-700">
-          A tag is a keyword or label that categorizes your question with other,
-          similar questions. Using the right tags makes it easier for others to
-          find and answer your question.
-        </p>
+    <section>
+      <div className="grid xs:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-1 m-3">
+        {tags.map((tag) => (
+          <TagCard key={nanoid()} tag={tag} />
+        ))}
       </div>
-      <section>
-        <div className="grid xs:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-1 m-3">
-          {tags.map((tag) => (
-            <TagCard key={nanoid()} tag={tag} />
-          ))}
-        </div>
-        <div className="p-4">
-          <Pagination items={total} limit={50} skip={skip} />
-        </div>
-      </section>
-    </>
+      <div className="p-4">
+        <Pagination items={total} limit={50} skip={skip} />
+      </div>
+    </section>
   );
 };
 

@@ -46,7 +46,6 @@ const Question = () => {
       }
     }
   };
-
   if (loading || !question || loadingAuth) return <Spinner />;
   return (
     <section className="p-4 w-full">

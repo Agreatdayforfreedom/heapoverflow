@@ -8,6 +8,17 @@ import { getUsersThunk } from "../features/user/userApi";
 import { Spinner } from "../components/Spinner";
 
 const Users = () => {
+  return (
+    <div>
+      <div className="p-5 ">
+        <h1 className="text-2xl font-semibold mb-2 text-slate-700">Users</h1>
+      </div>
+      <UsersSection />
+    </div>
+  );
+};
+
+const UsersSection = () => {
   const [currentQueryParameters, setSearchParams] = useSearchParams();
 
   const [limit, setLimit] = useState<number>(20);
@@ -30,9 +41,6 @@ const Users = () => {
   if (loading) return <Spinner />;
   return (
     <section>
-      <div className="p-5 ">
-        <h1 className="text-2xl font-semibold mb-2 text-slate-700">Users</h1>
-      </div>
       <div className="grid xs:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-3 m-5">
         {users.map((user) => (
           <CardUserInfo key={nanoid()} user={user} image="w-12 h-12" />

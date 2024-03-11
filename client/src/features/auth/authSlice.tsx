@@ -75,6 +75,9 @@ export const authSlice = createSlice({
       .addCase(authThunk.fulfilled, (state, action) => {
         state.user = action.payload;
         state.loading = false;
+      })
+      .addCase(authThunk.rejected, (state, action) => {
+        state.loading = false;
       });
   },
 });

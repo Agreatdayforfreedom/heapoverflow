@@ -72,6 +72,9 @@ const CommentSection = ({ from, type }: PropsCS) => {
   }, [limit]);
 
   useEffect(() => {
+    console.log(showMoreLoading);
+  }, [showMoreLoading]);
+  useEffect(() => {
     if (comment) {
       setCommentFilled(comment);
     }
@@ -166,20 +169,21 @@ const CommentSection = ({ from, type }: PropsCS) => {
             </button>
           ))}
 
-        {showMore > 3 &&
-          limit === Limit_enum.initial &&
-          (showMoreLoading ? (
-            <span className="text-sm font-semibold text-orange-500">
-              Loading...
-            </span>
-          ) : (
+        {showMoreLoading ? (
+          <span className="text-sm font-semibold text-orange-500">
+            Loading...
+          </span>
+        ) : (
+          showMore > 3 &&
+          limit === Limit_enum.initial && (
             <button
               className="text-sm text-blue-500 p-3"
               onClick={handleShowMore}
             >
               show - <b>{showMore - limit} </b>- more
             </button>
-          ))}
+          )
+        )}
       </div>
       {toggleComment && (
         <div className="mt-3">
@@ -224,7 +228,7 @@ const CommentCard = ({ comment, setForm, setToggleComment }: PropsComment) => {
     dispatch(deleteCommentThunk({ id: comment._id, config }));
   };
 
-  if (!comment || !user) return <Blank />;
+  // if (!comment) return <Blank />;
   return (
     <div className="flex border-b border-gray-300 py-1 px-2 text-sm first-of-type:border-y hover-div:block">
       <p className="break-all">
@@ -235,7 +239,7 @@ const CommentCard = ({ comment, setForm, setToggleComment }: PropsComment) => {
           {formatDate(comment.createdAt)}
         </span>
       </p>
-      {comment.owner?._id === user._id && (
+      {comment.owner?._id === user?._id && (
         <div className="hidden">
           <span>-</span>
           <button

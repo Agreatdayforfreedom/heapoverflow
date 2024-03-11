@@ -21,7 +21,6 @@ const Header = () => {
     setOpen(!open);
   };
 
-  if (loading) return <Blank />;
   return (
     <header className="z-20 bg-white flex justify-between h-[50px] items-center shadow-lg fixed top-0 w-full">
       <button className="relative pl-2 block sm:hidden" onClick={openMenu}>
