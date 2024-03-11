@@ -28,7 +28,7 @@ const QuestionsSection = () => {
   const [currentQueryParameters, setSearchParams] = useSearchParams();
 
   const [skip, setSkip] = useState<number>(0);
-  const [limit, setLimit] = useState<number>(40);
+  const [limit, setLimit] = useState<number>(4);
 
   const { questions, total, loading } = useAppSelector(
     (state) => state.question

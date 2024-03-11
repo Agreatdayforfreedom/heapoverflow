@@ -7,14 +7,28 @@ import CommentModel from "../models/Comment.model";
 import QuestionModel from "../models/Question.model";
 import UserModel from "../models/User.model";
 
-export const getAnswers = async (request: Request, response: Response) => {
+export const getAnswers = async (
+  request: Request<{ id: string }, {}, {}, { limit: string; skip: string }>,
+  response: Response
+) => {
   try {
-    let answers = await AnswerModel.find({
+    const { limit, skip } = request.query;
+    let answers: any = AnswerModel.find({
       question: request.params.id,
-    }).populate("owner");
+    });
 
-    return response.json(answers);
+    const countAnswers = await answers.clone().countDocuments();
+    if (skip != "0") {
+      answers = answers.skip(parseInt(skip, 10));
+    }
+    if (limit != "0") {
+      answers = answers.limit(parseInt(limit, 10));
+    }
+
+    answers = await answers.populate("owner").limit(limit).skip(skip);
+    return response.json({ countAnswers, answers });
   } catch (error) {
+    console.log(error);
     return HttpException("Internal Server Error", 500, response);
   }
 };

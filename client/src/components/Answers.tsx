@@ -13,20 +13,31 @@ import Answer from "./Answer";
 import Blank from "./Blank";
 import Button from "./Button";
 import { Spinner } from "./Spinner";
+import Pagination from "./Pagination";
 
 const Answers = () => {
-  const { answers, loading } = useAppSelector((state) => state.answers);
+  const [currentQueryParameters, setSearchParams] = useSearchParams();
+
+  const [skip, setSkip] = useState<number>(0);
+  const [limit, setLimit] = useState<number>(20);
+
+  const { answers, total, loading } = useAppSelector((state) => state.answers);
   const dispatch = useAppDispatch();
   const params = useParams();
 
   useEffect(() => {
     if (params.id) {
-      dispatch(getAnswersThunk(params.id));
+      dispatch(getAnswersThunk({ id: params.id, limit, skip }));
     }
-  }, []);
+  }, [limit, skip]);
+
+  useEffect(() => {
+    if (currentQueryParameters.get("skip")) {
+      setSkip(parseInt(currentQueryParameters.get("skip")!, 10));
+    }
+  }, [currentQueryParameters]);
 
   if (loading) return <Spinner size="2rem" />;
-  const total = answers.length;
   return (
     <div>
       {total > 0 && (
@@ -38,6 +49,9 @@ const Answers = () => {
       {answers.map((answer) => (
         <Answer key={nanoid()} answer={answer} />
       ))}
+      <div className="mt-5">
+        <Pagination items={total} limit={limit} skip={skip} />
+      </div>
       <PostAnswer />
     </div>
   );

@@ -9,15 +9,19 @@ interface Payload {
   };
   config?: Config;
   limit?: number;
+  skip?: number;
 }
 
 export const getAnswersThunk = createAsyncThunk(
   "answer/getAnswers",
-  async (id: string, { rejectWithValue }) => {
+  async ({ id, limit, skip }: Payload, { rejectWithValue }) => {
     try {
       const { data } = await axios(
-        `${import.meta.env.VITE_BACKEND_URL}/answer/${id}`
+        `${
+          import.meta.env.VITE_BACKEND_URL
+        }/answer/${id}?limit=${limit}&skip=${skip}`
       );
+      console.log(data);
       return data;
     } catch (error) {
       return rejectWithValue("There was an problem, please try again");

@@ -10,6 +10,7 @@ import {
 
 interface InitialState {
   answers: Answer[];
+  total: number;
   answer: Answer | undefined;
   questionId: string | undefined;
   token: string;
@@ -20,6 +21,7 @@ const token: string = localStorage.getItem("token") as string | "";
 
 const initialState: InitialState = {
   answers: [],
+  total: 0,
   answer: undefined,
   questionId: undefined,
   token,
@@ -42,7 +44,9 @@ const answerSlice = createSlice({
         state.answers = [];
       })
       .addCase(getAnswersThunk.fulfilled, (state, action) => {
-        state.answers = action.payload;
+        console.log({ action });
+        state.answers = action.payload.answers;
+        state.total = action.payload.countAnswers;
         state.loading = false;
       });
     builder
