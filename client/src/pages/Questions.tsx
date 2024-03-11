@@ -8,6 +8,7 @@ import QuestionCard from "../components/QuestionCard";
 import { getQuestionsThunk } from "../features/question/questionApi";
 import { clearState } from "../features/question/questionSlice";
 import { Question } from "../interfaces/interfaces";
+import { Spinner } from "../components/Spinner";
 
 const Questions = () => {
   const [currentQueryParameters, setSearchParams] = useSearchParams();
@@ -31,7 +32,7 @@ const Questions = () => {
     }
   }, [currentQueryParameters]);
 
-  if (loading) return <Blank />;
+  if (loading) return <Spinner />;
   return (
     <section className="mt-5 w-full flex flex-col">
       <div className="flex justify-between mt-2 mb-1">

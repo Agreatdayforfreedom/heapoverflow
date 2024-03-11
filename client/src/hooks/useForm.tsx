@@ -6,10 +6,15 @@ interface Form<T> {
   ) => void;
   form: T;
   setForm: (state: T) => void;
+  reset: (field: T) => void;
 }
 
 export const useForm = <T extends Object>(): Form<T> => {
   const [form, setForm] = useState<T>({} as T);
+
+  const reset = (field: T) => {
+    setForm({ ...field });
+  };
 
   const handleChange = ({
     target,
@@ -23,5 +28,6 @@ export const useForm = <T extends Object>(): Form<T> => {
     handleChange,
     form,
     setForm,
+    reset,
   };
 };

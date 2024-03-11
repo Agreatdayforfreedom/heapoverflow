@@ -5,6 +5,7 @@ import { useAppDispatch, useAppSelector } from "../app/hooks";
 import { signupThunk } from "../features/auth/authApi";
 import { hideError, showError } from "../features/auth/authSlice";
 import { clearState } from "../features/question/questionSlice";
+import { Spinner } from "../components/Spinner";
 
 const SignUp = () => {
   const { user, loading, error } = useAppSelector((state) => state.auth);
@@ -38,7 +39,7 @@ const SignUp = () => {
     );
   };
 
-  if (loading) return <p>loading</p>;
+  if (loading) return <Spinner />;
   if (user) return <Navigate to="/" />;
   return (
     <div>

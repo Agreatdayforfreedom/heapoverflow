@@ -1,9 +1,8 @@
 import { nanoid } from "@reduxjs/toolkit";
-import React, { useEffect, useState } from "react";
-import { Link, useParams, useSearchParams } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { useParams, useSearchParams } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../app/hooks";
 import AuthLink from "../components/AuthLink";
-import Blank from "../components/Blank";
 import Pagination from "../components/Pagination";
 import QuestionCard from "../components/QuestionCard";
 import { Spinner } from "../components/Spinner";
@@ -41,7 +40,7 @@ const Tagged = () => {
       setSkip(parseInt(currentQueryParameters.get("skip")!, 10));
     }
   }, [currentQueryParameters]);
-  if (!tag || loadingTag || loading) return <Blank />;
+  if (!tag || loadingTag || loading) return <Spinner />;
   return (
     <div>
       <div>

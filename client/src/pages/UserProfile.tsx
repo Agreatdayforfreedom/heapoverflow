@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../app/hooks";
 import { Spinner } from "../components/Spinner";
@@ -7,11 +7,10 @@ import { MdCake } from "react-icons/md";
 import { User } from "../interfaces/interfaces";
 import { FiMessageSquare } from "react-icons/fi";
 import { formatDate } from "../utils/formatDate";
-import { Answer, Question } from "../interfaces/interfaces";
+import { Question } from "../interfaces/interfaces";
 import { getRelatedQuestionsThunk } from "../features/question/questionApi";
 import { getRelatedAnswersThunk } from "../features/answer/answerApi";
 import { nanoid } from "@reduxjs/toolkit";
-import Blank from "../components/Blank";
 
 interface Post {
   _id: string;
@@ -54,7 +53,7 @@ const UserProfile = () => {
   }, [questions, answers]);
 
   if (loading || !userInfo || loadingAnswer || loadingQuestion)
-    return <Blank />;
+    return <Spinner />;
   return (
     <section className="p-6">
       <div>

@@ -1,9 +1,8 @@
 import { nanoid } from "@reduxjs/toolkit";
-import { FormEvent, useEffect, useState } from "react";
+import { FormEvent, useEffect, useState, useTransition } from "react";
 import { Link } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../app/hooks";
 import {
-  createCommentThunk,
   deleteCommentThunk,
   editCommentThunk,
 } from "../features/comment/commentsApi";
@@ -18,7 +17,6 @@ import { configAxios } from "../utils/configAxios";
 import { useForm } from "../hooks/useForm";
 import axios from "axios";
 import { CommentStatus_enum } from "../features/comment/commentSlice";
-import { Spinner } from "./Spinner";
 import Blank from "./Blank";
 
 enum Limit_enum {
@@ -43,9 +41,9 @@ interface FormType {
 }
 
 const CommentSection = ({ from, type }: PropsCS) => {
-  const [loading, setLoading] = useState<boolean>(true);
   const [sizeComment, setSizeComment] = useState<number>(0);
   const [showMore, setShowMore] = useState<number>(0);
+  const [showMoreLoading, setShowMoreLoading] = useState<boolean>(false);
   const [limit, setLimit] = useState<number>(Limit_enum.initial);
   const [toggleComment, setToggleComment] = useState<boolean>(false);
   const [commentFilled, setCommentFilled] = useState<Comment>({} as Comment);
@@ -56,16 +54,19 @@ const CommentSection = ({ from, type }: PropsCS) => {
   const dispatch = useAppDispatch();
   const { comment, commentStatus } = useAppSelector((state) => state.comments);
 
+  let [isPending, startTransition] = useTransition();
+
   const config = configAxios(token);
 
   useEffect(() => {
+    setShowMoreLoading(true);
     const fetch = async () => {
       const { data } = await axios(
         `${import.meta.env.VITE_BACKEND_URL}/comment/${from._id}?limit=${limit}`
       );
       setComments(data.query);
       setShowMore(data.commentsLength);
-      setLoading(false);
+      setShowMoreLoading(false);
     };
     fetch();
   }, [limit]);
@@ -126,7 +127,9 @@ const CommentSection = ({ from, type }: PropsCS) => {
         { content: payload.content },
         config
       );
-      setComments((prev) => [data, ...prev]);
+      startTransition(() => {
+        setComments((prev) => [data, ...prev]);
+      });
     }
     setForm({ content: "" } as FormType);
     setToggleComment(false);
@@ -136,8 +139,6 @@ const CommentSection = ({ from, type }: PropsCS) => {
     setLimit(Limit_enum.all);
     setShowMore(0);
   };
-
-  if (loading || !comments) return <Blank />;
   return (
     <>
       <div className="mt-5">
@@ -165,14 +166,20 @@ const CommentSection = ({ from, type }: PropsCS) => {
             </button>
           ))}
 
-        {showMore > 3 && limit === Limit_enum.initial && (
-          <button
-            className="text-sm text-blue-500 p-3"
-            onClick={handleShowMore}
-          >
-            show - <b>{showMore - limit} </b>- more
-          </button>
-        )}
+        {showMore > 3 &&
+          limit === Limit_enum.initial &&
+          (showMoreLoading ? (
+            <span className="text-sm font-semibold text-orange-500">
+              Loading...
+            </span>
+          ) : (
+            <button
+              className="text-sm text-blue-500 p-3"
+              onClick={handleShowMore}
+            >
+              show - <b>{showMore - limit} </b>- more
+            </button>
+          ))}
       </div>
       {toggleComment && (
         <div className="mt-3">
@@ -193,7 +200,7 @@ const CommentSection = ({ from, type }: PropsCS) => {
             <div className="mx-2">
               <Button
                 name={form.id ? "Save edits" : "Add comment"}
-                disabled={false}
+                disabled={isPending}
               />
             </div>
           </form>

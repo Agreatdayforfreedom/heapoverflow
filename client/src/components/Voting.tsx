@@ -8,6 +8,7 @@ import { configAxios } from "../utils/configAxios";
 import ArrowDown from "./ArrowDown";
 import ArrowUp from "./ArrowUp";
 import Blank from "./Blank";
+import { Spinner } from "./Spinner";
 
 //todo: limit answers
 //todo: pagination tags does not work
@@ -91,7 +92,7 @@ const Voting = ({ postId, ownerId }: Props) => {
     }, 2000);
   };
 
-  if (loadingVotes || loading) return <Blank />;
+  if (loading) return <Spinner size="2rem" />;
   return (
     <div className="flex flex-col justify-start items-center text-[#aab0b4]">
       <ArrowUp

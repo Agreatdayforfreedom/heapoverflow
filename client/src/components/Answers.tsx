@@ -1,5 +1,5 @@
 import { nanoid } from "@reduxjs/toolkit";
-import React, { FormEvent, useEffect, useState } from "react";
+import { FormEvent, useEffect, useState } from "react";
 import { useNavigate, useParams, useSearchParams } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../app/hooks";
 import {
@@ -12,7 +12,7 @@ import { configAxios } from "../utils/configAxios";
 import Answer from "./Answer";
 import Blank from "./Blank";
 import Button from "./Button";
-import Pagination from "./Pagination";
+import { Spinner } from "./Spinner";
 
 const Answers = () => {
   const { answers, loading } = useAppSelector((state) => state.answers);
@@ -25,7 +25,7 @@ const Answers = () => {
     }
   }, []);
 
-  if (loading) return <Blank />;
+  if (loading) return <Spinner size="2rem" />;
   const total = answers.length;
   return (
     <div>
@@ -52,15 +52,15 @@ const PostAnswer = () => {
 
   const params = useParams();
   const navigate = useNavigate();
-  const { handleChange, form } = useForm<{ content: string }>();
+  const { handleChange, form, reset } = useForm<{ content: string }>();
 
   const config = configAxios(token);
 
   useEffect(() => {
     if ("content" in form && form.content.trim() !== "") {
-      setFill(false);
-    } else {
       setFill(true);
+    } else {
+      setFill(false);
     }
   }, [form]);
 
@@ -74,10 +74,10 @@ const PostAnswer = () => {
     const payload = form;
     if (params.id) {
       dispatch(createAnswerThunk({ id: params.id, payload, config }));
+      reset({ content: "" });
     }
   };
 
-  if (loading) return <Blank />;
   return (
     <div className="p-2 mt-5">
       <h2 className=" text-lg">Your Answer</h2>
@@ -86,9 +86,10 @@ const PostAnswer = () => {
           name="content"
           id="content"
           onChange={handleChange}
+          value={form.content}
           className="w-full mb-4 bg-transparent rounded border p-2 border-slate-400"
         ></textarea>
-        <Button name="Post your answer" disabled={fill} />
+        <Button name={"Post your answer"} disabled={!fill || loading} />
       </form>
     </div>
   );

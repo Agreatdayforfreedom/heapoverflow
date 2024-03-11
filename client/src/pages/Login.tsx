@@ -1,11 +1,11 @@
 import { FormEvent, useEffect, useState } from "react";
-import { Link, Navigate, useNavigate } from "react-router-dom";
+import { Link, Navigate } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../app/hooks";
-import { authThunk, loginThunk } from "../features/auth/authApi";
+import { loginThunk } from "../features/auth/authApi";
 import { hideError, showError } from "../features/auth/authSlice";
 import { FaCubes } from "react-icons/fa";
-import Blank from "../components/Blank";
 import { clearState } from "../features/question/questionSlice";
+import { Spinner } from "../components/Spinner";
 
 const Login = () => {
   const [findBy, setFindBy] = useState("");
@@ -33,7 +33,7 @@ const Login = () => {
 
     dispatch(loginThunk({ findBy, password }));
   };
-  if (loading) return <Blank />;
+  if (loading) return <Spinner />;
   if (user) return <Navigate to="/" />;
   return (
     <main className="flex items-center justify-center h-screen">

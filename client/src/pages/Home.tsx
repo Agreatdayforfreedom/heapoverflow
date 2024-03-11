@@ -2,12 +2,11 @@ import { nanoid } from "@reduxjs/toolkit";
 import { useEffect } from "react";
 import { Link } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../app/hooks";
-import Blank from "../components/Blank";
 import QuestionCard from "../components/QuestionCard";
-
 import { getQuestionsThunk } from "../features/question/questionApi";
 import { clearState } from "../features/question/questionSlice";
 import { Question } from "../interfaces/interfaces";
+import { Spinner } from "../components/Spinner";
 
 const Home = () => {
   const { questions, loading } = useAppSelector((state) => state.question);
@@ -22,7 +21,7 @@ const Home = () => {
     console.log({ questions });
   }, [questions]);
 
-  if (loading || !questions) return <Blank />;
+  if (loading || !questions) return <Spinner />;
   return (
     <section className="mt-5 w-full flex flex-col">
       <div className="flex justify-between mt-2 mb-5">

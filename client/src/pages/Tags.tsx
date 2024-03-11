@@ -1,14 +1,13 @@
 import { nanoid } from "@reduxjs/toolkit";
-import axios from "axios";
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../app/hooks";
-import Blank from "../components/Blank";
 import Pagination from "../components/Pagination";
 import Tag from "../components/Tag";
 import { getTagsThunk } from "../features/tag/tagApi";
 import { clearState } from "../features/tag/tagSlice";
 import { Tag as ITag } from "../interfaces/interfaces";
+import { Spinner } from "../components/Spinner";
 
 interface Props {
   tag: ITag;
@@ -33,7 +32,7 @@ const Tags = () => {
     }
   }, [currentQueryParameters]);
 
-  if (loading) return <Blank />;
+  if (loading) return <Spinner />;
   return (
     <>
       <div className="p-5 ">

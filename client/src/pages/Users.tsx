@@ -1,18 +1,17 @@
 import { nanoid } from "@reduxjs/toolkit";
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../app/hooks";
-import Blank from "../components/Blank";
 import CardUserInfo from "../components/CardUserInfo";
 import Pagination from "../components/Pagination";
 import { getUsersThunk } from "../features/user/userApi";
+import { Spinner } from "../components/Spinner";
 
 const Users = () => {
   const [currentQueryParameters, setSearchParams] = useSearchParams();
 
   const [limit, setLimit] = useState<number>(20);
   const [skip, setSkip] = useState<number>(0);
-  const [fakeLoading, setFakeLoading] = useState(true);
   const { loading, total, users } = useAppSelector((state) => state.user);
 
   const dispatch = useAppDispatch();
@@ -28,7 +27,7 @@ const Users = () => {
     }
   }, [currentQueryParameters]);
 
-  if (loading) return <Blank />;
+  if (loading) return <Spinner />;
   return (
     <section>
       <div className="p-5 ">
