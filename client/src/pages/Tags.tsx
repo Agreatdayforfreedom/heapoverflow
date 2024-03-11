@@ -30,7 +30,7 @@ const Tags = () => {
 
 const TagSection = () => {
   const [currentQueryParameters, setSearchParams] = useSearchParams();
-  const [limit, setLimit] = useState<number>(1);
+  const [limit, setLimit] = useState<number>(20);
   const [skip, setSkip] = useState<number>(0);
 
   const dispatch = useAppDispatch();
@@ -38,7 +38,7 @@ const TagSection = () => {
   useEffect(() => {
     const fetch = async () => {
       dispatch(clearState());
-      dispatch(getTagsThunk({ skip }));
+      dispatch(getTagsThunk({ skip, limit }));
     };
     fetch();
   }, [skip]);

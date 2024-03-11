@@ -3,11 +3,11 @@ import HttpException from "../exceptions/http.exception";
 import TagModel from "../models/Tag.model";
 
 export const getTags = async (
-  request: Request<{}, {}, {}, { skip: string }>,
+  request: Request<{}, {}, {}, { skip: string; limit: string }>,
   response: Response
 ) => {
   try {
-    const { skip } = request.query;
+    const { skip, limit } = request.query;
 
     let tags: any = TagModel.find();
     const tagsCount = await tags.clone().countDocuments();
@@ -16,7 +16,7 @@ export const getTags = async (
       tags = tags.skip(parseInt(skip, 10));
     }
 
-    tags = await tags.limit(50).populate("totalQuestions");
+    tags = await tags.limit(limit).populate("totalQuestions");
 
     return response.json({ tagsCount, tags });
   } catch (error) {
