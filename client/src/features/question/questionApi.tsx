@@ -49,7 +49,6 @@ export const getQuestionsByTagThunk = createAsyncThunk(
   "question/getQuestionByTag",
   async ({ id, limit, skip }: Payload, { rejectWithValue }) => {
     try {
-      // console.log({ id, limit, skip });
       const { data } = await axios(
         `${
           import.meta.env.VITE_BACKEND_URL

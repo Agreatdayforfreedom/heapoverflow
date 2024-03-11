@@ -29,7 +29,6 @@ const UsersSection = () => {
 
   useEffect(() => {
     dispatch(getUsersThunk({ limit, skip }));
-    console.log(users);
   }, [limit, skip]);
 
   useEffect(() => {

@@ -44,7 +44,6 @@ const answerSlice = createSlice({
         state.answers = [];
       })
       .addCase(getAnswersThunk.fulfilled, (state, action) => {
-        console.log({ action });
         state.answers = action.payload.answers;
         state.total = action.payload.countAnswers;
         state.loading = false;

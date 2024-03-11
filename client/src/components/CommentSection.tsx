@@ -72,9 +72,6 @@ const CommentSection = ({ from, type }: PropsCS) => {
   }, [limit]);
 
   useEffect(() => {
-    console.log(showMoreLoading);
-  }, [showMoreLoading]);
-  useEffect(() => {
     if (comment) {
       setCommentFilled(comment);
     }

@@ -107,7 +107,6 @@ async function query(
     ownerPost.reputation = ownerPost.reputation += 10;
   }
 
-  console.log(ownerPost.reputation, 2);
   const [voted, _] = await Promise.all([
     await newVote.save(),
     await ownerPost.save(),

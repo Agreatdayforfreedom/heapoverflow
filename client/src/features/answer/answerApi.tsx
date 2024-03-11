@@ -21,7 +21,6 @@ export const getAnswersThunk = createAsyncThunk(
           import.meta.env.VITE_BACKEND_URL
         }/answer/${id}?limit=${limit}&skip=${skip}`
       );
-      console.log(data);
       return data;
     } catch (error) {
       return rejectWithValue("There was an problem, please try again");

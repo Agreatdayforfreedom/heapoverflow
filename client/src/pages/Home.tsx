@@ -43,10 +43,6 @@ const QuestionsSection = () => {
     dispatch(getQuestionsThunk({ limit: 20 }));
   }, []);
 
-  useEffect(() => {
-    console.log({ questions });
-  }, [questions]);
-
   if (loading || !questions) return <Spinner />;
   return (
     <section>
