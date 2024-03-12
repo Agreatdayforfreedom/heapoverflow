@@ -8,25 +8,133 @@ import QuestionModel from "../models/Question.model";
 import UserModel from "../models/User.model";
 
 export const getAnswers = async (
-  request: Request<{ id: string }, {}, {}, { limit: string; skip: string }>,
+  request: Request<
+    { id: string },
+    {},
+    {},
+    { limit: string; skip: string; userId: string }
+  >,
   response: Response
 ) => {
   try {
-    const { limit, skip } = request.query;
-    let answers: any = AnswerModel.find({
+    const { limit, skip, userId } = request.query;
+    let answers;
+    if (userId) {
+      answers = await AnswerModel.aggregate([
+        {
+          $match: {
+            question: new mongoose.Types.ObjectId(request.params.id),
+          },
+        },
+        {
+          $skip: parseInt(skip, 10),
+        },
+        {
+          $limit: parseInt(limit, 10),
+        },
+        {
+          $lookup: {
+            from: "votes",
+            localField: "_id",
+            foreignField: "voteTo",
+            as: "votes",
+          },
+        },
+        {
+          $lookup: {
+            from: "users",
+            localField: "owner",
+            foreignField: "_id",
+            as: "owner",
+          },
+        },
+
+        { $unwind: "$owner" },
+        {
+          $project: {
+            _id: 1,
+            content: 1,
+            updatedAt: 1,
+            createdAt: 1,
+            owner: "$owner",
+            question: 1,
+            votesCount: { $size: "$votes" },
+            score: {
+              $sum: "$votes.vote",
+            },
+            vote: {
+              $arrayElemAt: [
+                {
+                  $filter: {
+                    input: "$votes",
+                    as: "vote",
+                    cond: {
+                      $eq: [
+                        "$$vote.voter",
+                        new mongoose.Types.ObjectId(userId as string),
+                      ],
+                    },
+                  },
+                },
+                0,
+              ],
+            },
+          },
+        },
+      ]);
+    } else {
+      answers = await AnswerModel.aggregate([
+        {
+          $match: {
+            question: new mongoose.Types.ObjectId(request.params.id),
+          },
+        },
+        {
+          $skip: parseInt(skip, 10),
+        },
+        {
+          $limit: parseInt(limit, 10),
+        },
+        {
+          $lookup: {
+            from: "votes",
+            localField: "_id",
+            foreignField: "voteTo",
+            as: "votes",
+          },
+        },
+        {
+          $lookup: {
+            from: "users",
+            localField: "owner",
+            foreignField: "_id",
+            as: "owner",
+          },
+        },
+
+        { $unwind: "$owner" },
+        {
+          $project: {
+            _id: 1,
+            content: 1,
+            updatedAt: 1,
+            createdAt: 1,
+            owner: "$owner",
+            question: 1,
+            votesCount: { $size: "$votes" },
+            score: {
+              $sum: "$votes.vote",
+            },
+          },
+        },
+      ]);
+    }
+
+    let countAnswers: any = await AnswerModel.find({
       question: request.params.id,
-    });
+    }).countDocuments();
 
-    const countAnswers = await answers.clone().countDocuments();
-    if (skip != "0") {
-      answers = answers.skip(parseInt(skip, 10));
-    }
-    if (limit != "0") {
-      answers = answers.limit(parseInt(limit, 10));
-    }
-
-    answers = await answers.populate("owner").limit(limit).skip(skip);
-    return response.json({ countAnswers, answers });
+    return response.json({ countAnswers, answers: answers });
   } catch (error) {
     console.log(error);
     return HttpException("Internal Server Error", 500, response);

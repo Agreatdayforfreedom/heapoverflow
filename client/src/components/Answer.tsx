@@ -31,7 +31,15 @@ const Answer = ({ answer }: Props) => {
   return (
     <div className="flex w-full border-b border-slate-300 mt-5">
       <div className="flex flex-col">
-        {/* <Voting postId={answer._id && answer._id} ownerId={answer.owner._id} /> */}
+        <Voting
+          postId={answer._id && answer._id}
+          ownerId={answer.owner._id}
+          votes={{
+            score: answer.score,
+            total: answer.votesCount,
+            vote: answer.vote,
+          }}
+        />
         {(question?.owner._id === user?._id || answer.accepted) && (
           <Accepted accepted={answer.accepted} id={answer._id} />
         )}

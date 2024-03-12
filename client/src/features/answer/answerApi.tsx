@@ -10,16 +10,17 @@ interface Payload {
   config?: Config;
   limit?: number;
   skip?: number;
+  userId?: string;
 }
 
 export const getAnswersThunk = createAsyncThunk(
   "answer/getAnswers",
-  async ({ id, limit, skip }: Payload, { rejectWithValue }) => {
+  async ({ id, limit, skip, userId }: Payload, { rejectWithValue }) => {
     try {
       const { data } = await axios(
         `${
           import.meta.env.VITE_BACKEND_URL
-        }/answer/${id}?limit=${limit}&skip=${skip}`
+        }/answer/${id}?userId=${userId}&limit=${limit}&skip=${skip}`
       );
       return data;
     } catch (error) {

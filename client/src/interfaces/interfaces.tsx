@@ -37,6 +37,9 @@ export interface Answer {
   accepted: boolean;
   createdAt: Date;
   updatedAt: Date;
+  score: number;
+  votesCount: number;
+  vote: Vote;
 }
 
 export interface Comment {

@@ -18,16 +18,23 @@ import Pagination from "./Pagination";
 const Answers = () => {
   const [currentQueryParameters, setSearchParams] = useSearchParams();
 
-  const [skip, setSkip] = useState<number>(0);
+  const [skip, setSkip] = useState<number>(
+    parseInt(currentQueryParameters.get("skip")!, 10)
+  );
   const [limit, setLimit] = useState<number>(20);
 
   const { answers, total, loading } = useAppSelector((state) => state.answers);
+  const { user } = useAppSelector((state) => state.auth);
+
   const dispatch = useAppDispatch();
   const params = useParams();
 
   useEffect(() => {
+    console.log("change");
     if (params.id) {
-      dispatch(getAnswersThunk({ id: params.id, limit, skip }));
+      dispatch(
+        getAnswersThunk({ id: params.id, limit, skip, userId: user?._id || "" })
+      );
     }
   }, [limit, skip]);
 

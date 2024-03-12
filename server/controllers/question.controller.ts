@@ -106,8 +106,6 @@ export const getQuestion = async (request: Request, response: Response) => {
         },
       ]);
     } else {
-      console.log("CRUNCH");
-
       question = QuestionModel.aggregate([
         {
           $match: {
@@ -157,11 +155,7 @@ export const getQuestion = async (request: Request, response: Response) => {
       ]);
     }
 
-    // const question = await QuestionModel.findOne({
-    //   _id: request.params.id,
-    // }).populate("tags");
     const [result] = await question;
-    console.log(result);
     return response.json(result);
   } catch (error) {
     console.log(error);
