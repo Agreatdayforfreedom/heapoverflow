@@ -19,7 +19,7 @@ const Answers = () => {
   const [currentQueryParameters, setSearchParams] = useSearchParams();
 
   const [skip, setSkip] = useState<number>(
-    parseInt(currentQueryParameters.get("skip")!, 10)
+    parseInt(currentQueryParameters.get("skip")!, 10) || 0
   );
   const [limit, setLimit] = useState<number>(20);
 
