@@ -18,6 +18,7 @@ import { useForm } from "../hooks/useForm";
 import axios from "axios";
 import { CommentStatus_enum } from "../features/comment/commentSlice";
 import Blank from "./Blank";
+import moment from "moment";
 
 enum Limit_enum {
   initial = 3,
@@ -233,7 +234,7 @@ const CommentCard = ({ comment, setForm, setToggleComment }: PropsComment) => {
         <span className="px-1">-</span>
         <span className="text-blue-500">{comment.owner?.username}</span>
         <span className="px-1 text-xs text-gray-500">
-          {formatDate(comment.createdAt)}
+          {moment(comment.createdAt).add(3, "days").calendar()}
         </span>
       </p>
       {comment.owner?._id === user?._id && (

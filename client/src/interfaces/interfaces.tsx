@@ -14,7 +14,7 @@ export interface Question {
   _id: string;
   title: string;
   content: string;
-  // votes?: number;
+  votes?: number;
   answers?: number;
   answerAccepted?: number;
   tags: Array<Tag>;

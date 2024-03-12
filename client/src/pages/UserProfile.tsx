@@ -11,6 +11,7 @@ import { Question } from "../interfaces/interfaces";
 import { getRelatedQuestionsThunk } from "../features/question/questionApi";
 import { getRelatedAnswersThunk } from "../features/answer/answerApi";
 import { nanoid } from "@reduxjs/toolkit";
+import moment from "moment";
 
 interface Post {
   _id: string;
@@ -70,7 +71,8 @@ const UserProfile = () => {
             <div className="flex my-1">
               <MdCake className="text-slate-700" />
               <span className="text-sm px-1 text-slate-700">
-                Member for {formatDate(userInfo.createdAt)}
+                Member for{" "}
+                {moment(userInfo.createdAt).add(3, "days").calendar()}
               </span>
             </div>
           </div>

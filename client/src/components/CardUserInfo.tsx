@@ -2,6 +2,7 @@ import React from "react";
 import { Link } from "react-router-dom";
 import { Answer, Question, User } from "../interfaces/interfaces";
 import { formatDate } from "../utils/formatDate";
+import moment from "moment";
 
 interface Props {
   user: User;
@@ -18,7 +19,9 @@ const CardUserInfo = ({ user, from = "", date = true, image }: Props) => {
       }`}
     >
       {date && from && (
-        <p className="text-xs text-slate-600">{formatDate(from.createdAt)}</p>
+        <p className="text-xs text-slate-600">
+          {moment(from.createdAt).add(3, "days").calendar()}
+        </p>
       )}
       <div className="flex ">
         <img

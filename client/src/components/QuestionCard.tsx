@@ -4,12 +4,14 @@ import { Link } from "react-router-dom";
 import { Question, Tag as ITag } from "../interfaces/interfaces";
 import { formatDate } from "../utils/formatDate";
 import Tag from "./Tag";
+import moment from "moment";
 
 interface Props {
   question: Question;
 }
 
 const QuestionCard = ({ question }: Props) => {
+  console.log(question);
   return (
     <div className="flex flex-col md:flex-row w-full py-2 border-t last:!border-y border-slate-400">
       <div className="flex flex-row items-center md:flex-col md:items-end w-28">
@@ -66,7 +68,7 @@ const QuestionCard = ({ question }: Props) => {
             </Link>
             <p className="font-semibold text-xs">{question.owner.reputation}</p>
             <p className="mx-1 text-xs text-gray-500 whitespace-nowrap">
-              {formatDate(question.createdAt)}
+              {moment(question.createdAt).add(3, "days").calendar()}
             </p>
           </div>
         </div>

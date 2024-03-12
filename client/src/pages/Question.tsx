@@ -17,6 +17,7 @@ import { clearState } from "../features/question/questionSlice";
 import { Tag as ITag } from "../interfaces/interfaces";
 import { configAxios } from "../utils/configAxios";
 import { formatDate } from "../utils/formatDate";
+import moment from "moment";
 
 const Question = () => {
   const { question, loading, token } = useAppSelector(
@@ -56,13 +57,13 @@ const Question = () => {
           <p className="text-sm text-slate-600 px-2">
             Asked{" "}
             <span className="text-slate-800">
-              {formatDate(question.createdAt)}
+              {moment(question.createdAt).add(3, "days").calendar()}
             </span>
           </p>
           <p className="text-sm text-slate-600 px-2">
             Modified{" "}
             <span className="text-slate-800">
-              {formatDate(question.updatedAt)}
+              {moment(question.updatedAt).add(3, "days").calendar()}
             </span>
           </p>
           <p className="text-sm text-slate-700 px-2">
