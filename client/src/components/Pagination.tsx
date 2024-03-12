@@ -14,7 +14,6 @@ const Pagination = ({ items, limit, skip }: Props) => {
 
   const [pages, setPages] = useState<number>(Math.ceil(items / limit));
   const [currentPage, setCurrentPage] = useState(1);
-
   useEffect(() => {
     if (typeof skip === "number") {
       setSearchParams(currentQueryParameters);
@@ -38,6 +37,7 @@ const Pagination = ({ items, limit, skip }: Props) => {
 
     setSearchParams(currentQueryParameters);
   };
+  if (pages === 0) return null;
   return (
     <div className="flex">
       {pages &&
