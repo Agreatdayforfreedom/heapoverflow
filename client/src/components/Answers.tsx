@@ -36,7 +36,6 @@ const Answers = () => {
       setSkip(parseInt(currentQueryParameters.get("skip")!, 10));
     }
   }, [currentQueryParameters]);
-
   if (loading) return <Spinner size="2rem" />;
   return (
     <div>

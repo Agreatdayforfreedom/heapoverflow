@@ -22,19 +22,23 @@ export enum VoteType_enum {
 interface Props {
   postId: string;
   ownerId: string;
+  votes: Votes;
 }
 
 interface Votes {
   total: number;
   score: number;
-  votes: Vote[];
+  vote: Vote;
 }
 
-const Voting = ({ postId, ownerId }: Props) => {
-  const [voteType, setVoteType] = useState<number>(VoteType_enum.unvote);
-  const [votes, setVotes] = useState<Votes>({} as Votes);
+const Voting = ({ postId, ownerId, votes }: Props) => {
+  console.log(votes);
+  const [voteType, setVoteType] = useState<number>(
+    votes.vote.vote as VoteType_enum
+  );
+  // const [votes, setVotes] = useState<Votes>({} as Votes);
   const [disabled, setDisabled] = useState<boolean>(false);
-  const [initialScore, setInitialScore] = useState<number>(0);
+  const [initialScore, setInitialScore] = useState<number>(votes.score);
   const [loadingVotes, setLoadingVotes] = useState(true);
 
   const { user, token, loading } = useAppSelector((state) => state.auth);
@@ -43,23 +47,24 @@ const Voting = ({ postId, ownerId }: Props) => {
   const navigate = useNavigate();
   const config = configAxios(token);
 
-  useEffect(() => {
-    const fetch = async () => {
-      const { data } = await axios(
-        `${import.meta.env.VITE_BACKEND_URL}/vote/${postId}`
-      );
-      if (data) {
-        const votedType = data.votes.filter(
-          (v: Vote) => v.voter === user?._id
-        )[0];
-        if (votedType) setVoteType(votedType.vote);
-        setInitialScore(data.score);
-        setVotes(data);
-        setLoadingVotes(false);
-      }
-    };
-    fetch();
-  }, []);
+  // useEffect(() => {
+  //   console.log("fetching");
+  //   const fetch = async () => {
+  //     const { data } = await axios(
+  //       `${import.meta.env.VITE_BACKEND_URL}/vote/${postId}`
+  //     );
+  //     if (data) {
+  //       const votedType = data.votes.filter(
+  //         (v: Vote) => v.voter === user?._id
+  //       )[0];
+  //       if (votedType) setVoteType(votedType.vote);
+  //       setInitialScore(data.score);
+  //       setVotes(data);
+  //       setLoadingVotes(false);
+  //     }
+  //   };
+  //   fetch();
+  // }, []);
   const sendVote = (type: VoteType_enum, position?: VoteType_enum) => {
     if (!user) {
       return navigate("/login");

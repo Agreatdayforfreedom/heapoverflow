@@ -34,9 +34,10 @@ const Question = () => {
   useEffect(() => {
     dispatch(clearState());
     if (params.id) {
-      dispatch(getQuestionThunk(params.id));
+      console.log("dis");
+      dispatch(getQuestionThunk({ id: params.id, userId: user?._id || "" }));
     }
-  }, []);
+  }, [user]);
 
   const handleRemove = () => {
     if (params.id) {
@@ -71,7 +72,15 @@ const Question = () => {
         </div>
       </div>
       <div className="flex w-full">
-        <Voting postId={question._id} ownerId={question.owner._id} />
+        <Voting
+          postId={question._id}
+          ownerId={question.owner._id}
+          votes={{
+            score: question.score,
+            total: question.votesCount,
+            vote: question.vote,
+          }}
+        />
         <div className="w-full p-4">
           <p className="break-all">{question.content}</p>
           <div className="flex my-5">

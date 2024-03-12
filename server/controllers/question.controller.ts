@@ -1,3 +1,4 @@
+import mongoose from "mongoose";
 import { Request, Response } from "express";
 import HttpException from "../exceptions/http.exception";
 import { Tag } from "../interfaces/interfaces";
@@ -36,11 +37,125 @@ export const getQuestions = async (
 
 export const getQuestion = async (request: Request, response: Response) => {
   try {
-    const question = await QuestionModel.findOne({
-      _id: request.params.id,
-    }).populate("tags");
-    return response.json(question);
+    let question;
+    if (request.query.userId) {
+      question = QuestionModel.aggregate([
+        {
+          $match: {
+            _id: new mongoose.Types.ObjectId(request.params.id),
+          },
+        },
+        {
+          $lookup: {
+            from: "votes",
+            localField: "_id",
+            foreignField: "voteTo",
+            as: "votes",
+          },
+        },
+        {
+          $lookup: {
+            from: "users",
+            localField: "owner",
+            foreignField: "_id",
+            as: "owner",
+          },
+        },
+        {
+          $lookup: {
+            from: "tags",
+            localField: "tags",
+            foreignField: "_id",
+            as: "tags",
+          },
+        },
+        { $unwind: "$owner" },
+        {
+          $project: {
+            _id: 1,
+            title: 1,
+            content: 1,
+            updatedAt: 1,
+            createdAt: 1,
+            tags: 1,
+            owner: "$owner",
+            votesCount: { $size: "$votes" },
+            score: {
+              $sum: "$votes.vote",
+            },
+            vote: {
+              $filter: {
+                input: "$votes",
+                as: "type",
+                cond: {
+                  $eq: [
+                    "$$type.voter",
+                    new mongoose.Types.ObjectId(request.query.userId as string),
+                  ],
+                },
+              },
+            },
+          },
+        },
+      ]);
+    } else {
+      question = QuestionModel.aggregate([
+        {
+          $match: {
+            _id: new mongoose.Types.ObjectId(request.params.id),
+          },
+        },
+        {
+          $lookup: {
+            from: "votes",
+            localField: "_id",
+            foreignField: "voteTo",
+            as: "votes",
+          },
+        },
+        {
+          $lookup: {
+            from: "users",
+            localField: "owner",
+            foreignField: "_id",
+            as: "owner",
+          },
+        },
+        {
+          $lookup: {
+            from: "tags",
+            localField: "tags",
+            foreignField: "_id",
+            as: "tags",
+          },
+        },
+        { $unwind: "$owner" },
+        {
+          $project: {
+            _id: 1,
+            title: 1,
+            content: 1,
+            updatedAt: 1,
+            createdAt: 1,
+            tags: 1,
+            owner: "$owner",
+            votesCount: { $size: "$votes" },
+            score: {
+              $sum: "$votes.vote",
+            },
+          },
+        },
+      ]);
+    }
+
+    // const question = await QuestionModel.findOne({
+    //   _id: request.params.id,
+    // }).populate("tags");
+    const [result] = await question;
+    console.log(result);
+    return response.json(result);
   } catch (error) {
+    console.log(error);
     return HttpException("Internal Server Error", 500, response);
   }
 };

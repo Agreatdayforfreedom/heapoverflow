@@ -33,11 +33,15 @@ export const getQuestionsThunk = createAsyncThunk(
 
 export const getQuestionThunk = createAsyncThunk(
   "question/getQuestion",
-  async (id: string, { rejectWithValue }) => {
+  async (
+    { id, userId }: { id: string; userId: string },
+    { rejectWithValue }
+  ) => {
     try {
       const { data } = await axios(
-        `${import.meta.env.VITE_BACKEND_URL}/question/${id}`
+        `${import.meta.env.VITE_BACKEND_URL}/question/${id}?userId=${userId}`
       );
+      console.log(data);
       return data;
     } catch (error) {
       return rejectWithValue("error");
