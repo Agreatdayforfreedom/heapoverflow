@@ -57,13 +57,13 @@ const Question = () => {
           <p className="text-sm text-slate-600 px-2">
             Asked{" "}
             <span className="text-slate-800">
-              {moment(question.createdAt).add(3, "days").calendar()}
+              {moment(question.createdAt).fromNow()}
             </span>
           </p>
           <p className="text-sm text-slate-600 px-2">
             Modified{" "}
             <span className="text-slate-800">
-              {moment(question.updatedAt).add(3, "days").calendar()}
+              {moment(question.updatedAt).fromNow()}
             </span>
           </p>
           <p className="text-sm text-slate-700 px-2">

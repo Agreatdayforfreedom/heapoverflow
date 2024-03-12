@@ -6,7 +6,6 @@ import { getUserThunk } from "../features/user/userApi";
 import { MdCake } from "react-icons/md";
 import { User } from "../interfaces/interfaces";
 import { FiMessageSquare } from "react-icons/fi";
-import { formatDate } from "../utils/formatDate";
 import { Question } from "../interfaces/interfaces";
 import { getRelatedQuestionsThunk } from "../features/question/questionApi";
 import { getRelatedAnswersThunk } from "../features/answer/answerApi";
@@ -71,8 +70,7 @@ const UserProfile = () => {
             <div className="flex my-1">
               <MdCake className="text-slate-700" />
               <span className="text-sm px-1 text-slate-700">
-                Member for{" "}
-                {moment(userInfo.createdAt).add(3, "days").calendar()}
+                Member for {moment(userInfo.createdAt).fromNow()}
               </span>
             </div>
           </div>

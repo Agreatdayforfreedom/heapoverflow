@@ -20,7 +20,7 @@ const CardUserInfo = ({ user, from = "", date = true, image }: Props) => {
     >
       {date && from && (
         <p className="text-xs text-slate-600">
-          {moment(from.createdAt).add(3, "days").calendar()}
+          {moment(from.createdAt).fromNow()}
         </p>
       )}
       <div className="flex ">

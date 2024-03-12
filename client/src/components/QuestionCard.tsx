@@ -68,7 +68,7 @@ const QuestionCard = ({ question }: Props) => {
             </Link>
             <p className="font-semibold text-xs">{question.owner.reputation}</p>
             <p className="mx-1 text-xs text-gray-500 whitespace-nowrap">
-              {moment(question.createdAt).add(3, "days").calendar()}
+              {moment(question.createdAt).fromNow()}
             </p>
           </div>
         </div>

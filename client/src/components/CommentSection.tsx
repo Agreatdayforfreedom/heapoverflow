@@ -234,7 +234,7 @@ const CommentCard = ({ comment, setForm, setToggleComment }: PropsComment) => {
         <span className="px-1">-</span>
         <span className="text-blue-500">{comment.owner?.username}</span>
         <span className="px-1 text-xs text-gray-500">
-          {moment(comment.createdAt).add(3, "days").calendar()}
+          {moment(comment.createdAt).fromNow()}
         </span>
       </p>
       {comment.owner?._id === user?._id && (
