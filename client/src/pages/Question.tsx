@@ -34,7 +34,6 @@ const Question = () => {
   useEffect(() => {
     dispatch(clearState());
     if (params.id) {
-      console.log("dis");
       dispatch(getQuestionThunk({ id: params.id, userId: user?._id || "" }));
     }
   }, [user]);
@@ -78,7 +77,7 @@ const Question = () => {
           votes={{
             score: question.score,
             total: question.votesCount,
-            vote: question.vote,
+            vote: question.vote || undefined,
           }}
         />
         <div className="w-full p-4">

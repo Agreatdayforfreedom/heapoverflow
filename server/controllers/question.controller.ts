@@ -84,21 +84,30 @@ export const getQuestion = async (request: Request, response: Response) => {
               $sum: "$votes.vote",
             },
             vote: {
-              $filter: {
-                input: "$votes",
-                as: "type",
-                cond: {
-                  $eq: [
-                    "$$type.voter",
-                    new mongoose.Types.ObjectId(request.query.userId as string),
-                  ],
+              $arrayElemAt: [
+                {
+                  $filter: {
+                    input: "$votes",
+                    as: "vote",
+                    cond: {
+                      $eq: [
+                        "$$vote.voter",
+                        new mongoose.Types.ObjectId(
+                          request.query.userId as string
+                        ),
+                      ],
+                    },
+                  },
                 },
-              },
+                0,
+              ],
             },
           },
         },
       ]);
     } else {
+      console.log("CRUNCH");
+
       question = QuestionModel.aggregate([
         {
           $match: {

@@ -28,13 +28,12 @@ interface Props {
 interface Votes {
   total: number;
   score: number;
-  vote: Vote;
+  vote?: Vote;
 }
 
 const Voting = ({ postId, ownerId, votes }: Props) => {
-  console.log(votes);
   const [voteType, setVoteType] = useState<number>(
-    votes.vote.vote as VoteType_enum
+    votes.vote?.vote as VoteType_enum
   );
   // const [votes, setVotes] = useState<Votes>({} as Votes);
   const [disabled, setDisabled] = useState<boolean>(false);
