@@ -13,7 +13,7 @@ const EditQuestion = () => {
   const dispatch = useAppDispatch();
   useEffect(() => {
     if (params.id && !question) {
-      dispatch(getQuestionThunk(params.id));
+      dispatch(getQuestionThunk({ id: params.id, userId: user?._id || "" }));
     }
   }, []);
 
